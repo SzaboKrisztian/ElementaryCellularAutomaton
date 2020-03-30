@@ -35,6 +35,17 @@ public class RuleViewHolder extends RecyclerView.ViewHolder {
             favBtn.setText("Favourite");
         }
 
+        favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rule.isFavourite()) {
+                    adapter.removeFavourite(rule);
+                } else {
+                    adapter.makeFavourite(rule);
+                }
+            }
+        });
+
         this.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -7,12 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ECA {
-    BitSet state;
-    Map<BitSet, Boolean> ruleSet;
+    private BitSet state;
+    private Map<BitSet, Boolean> ruleSet;
+    private int length;
 
     public ECA(int rule, String state) {
         this.ruleSet = generateRuleSet(rule);
         this.state = parseState(state);
+        this.length = state.length();
 
         Log.d("ECA", "len: " + this.state.length());
     }
@@ -21,8 +23,12 @@ public class ECA {
         return (BitSet) this.state.clone();
     }
 
+    public int getLength() {
+        return length;
+    }
+
     public void advance() {
-        BitSet result = new BitSet(this.state.length());
+        BitSet result = new BitSet(this.length);
 
         // Left edge is a special case
         BitSet pattern = new BitSet(3);
@@ -40,10 +46,12 @@ public class ECA {
         }
 
         // Right edge is a special case
-        pattern.set(0, this.state.get(this.state.length() - 2));
-        pattern.set(1, this.state.get(this.state.length() - 1));
+        pattern.set(0, this.state.get(this.length - 2));
+        pattern.set(1, this.state.get(this.length - 1));
         pattern.set(3, false);
         result.set(result.size() - 1, ruleSet.get(pattern));
+
+        this.state = result;
     }
 
     private Map<BitSet, Boolean> generateRuleSet(int rule) {
